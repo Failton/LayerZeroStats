@@ -1,0 +1,8 @@
+{
+    "operationName": "GetResult",
+    "variables": {
+        "query_id": 2464151,
+        "parameters": []
+    },
+    "query": "query GetResult($query_id: Int!, $parameters: [Parameter!]!) {\n  get_result_v3(query_id: $query_id, parameters: $parameters) {\n    job_id\n    result_id\n    error_id\n    __typename\n  }\n}\n"
+}
