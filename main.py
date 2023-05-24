@@ -30,7 +30,7 @@ QUERY1 = 2464151
 QUERY2 =  2492847
 
 
-def is_exists(path) -> bool:
+def is_exists(path: str) -> bool:
     return os.path.isfile(path)
 
 
@@ -70,7 +70,7 @@ def edit_dates2(wallets: list) -> None:
             if (i == 'usd_total' and wallet[i] != None):
                 wallet[i] = round(wallet[i],2)
                 
-def get_filtered_wallets(data_file) -> list:
+def get_filtered_wallets(data_file: str) -> list:
     with open(data_file, 'r') as file:
         data = json.load(file)
 
@@ -139,7 +139,7 @@ def save_to_excel(wallets1: list, wallets2: list) -> None:
     workbook.close()
 
 
-def get_execution_id(session, query_id):
+def get_execution_id(session: tls_client.Session, query_id: int) -> int:
     with open(file_query1, 'r') as file:
         payload = json.load(file)
 
@@ -160,7 +160,7 @@ def get_execution_id(session, query_id):
 
 
 
-def setup_session():
+def setup_session() -> tls_client.Session:
     session = tls_client.Session(
         client_identifier="chrome112",
         random_tls_extension_order=True
@@ -173,19 +173,20 @@ def setup_session():
     }
 
     session.headers = headers
+    session.timeout_seconds = 1000
     return session
 
 
 def update_database() -> None:
     session = setup_session()
 
-    logger.info('Начинаю скачивание баз данных. Процесс может занять несколько минут...')
+    logger.info('Начинаю скачивание двух баз данных. Процесс может занять несколько минут...')
 
     with open(file_query2, 'r') as file:
         payload = json.load(file)
 
     execution_id = get_execution_id(session, QUERY1)
-    logger.info(f'ID запроса №{QUERY1}: {execution_id}')
+    logger.info(f'ID #1 базы данных №{QUERY1}: {execution_id}')
     payload['variables']['execution_id'] = execution_id
 
     while True:
@@ -204,13 +205,13 @@ def update_database() -> None:
 
     #----------------------------------------------
 
-    logger.info(f'Скачиваю вторую базу данных')
+    # logger.info(f'Скачиваю вторую базу данных')
 
     with open(file_query3, 'r') as file:
         payload = json.load(file)
 
     execution_id = get_execution_id(session, QUERY2)
-    logger.info(f'ID запроса №{QUERY2}: {execution_id}')
+    logger.info(f'ID #2 базы данных №{QUERY2}: {execution_id}')
     payload['variables']['execution_id'] = execution_id
 
     while True:
@@ -270,7 +271,7 @@ def get_action() -> str:
     return action
 
 
-def main():
+def main() -> None:
     art = text2art(text="LAYERZERO   STATS", font="standart")
     print(colored(art,'light_blue'))
     print(colored('Автор: t.me/cryptogovnozavod\n','light_cyan'))
