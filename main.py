@@ -35,7 +35,7 @@ def is_exists(path: str) -> bool:
 
 
 def filter_wallets1(wallet: dict) -> bool:
-    if (wallet['user_address'].lower() in WALLETS):
+    if (wallet['ua'].lower() in WALLETS):
         return True
     return False
 
@@ -57,8 +57,8 @@ def load_wallets() -> None:
 def edit_dates1(wallets: list) -> None:
     for wallet in wallets:
         for i in wallet:
-            if (i in (['initial_block_date', 'last_block_date'])):
-                wallet[i] = wallet[i][:10]
+            if (i in (['ibt'])):
+                wallet[i] = wallet[i][:19]
             if (i == 'amount_usd' and wallet[i] != None):
                 wallet[i] = round(wallet[i],2)
                 
@@ -86,15 +86,27 @@ def get_filtered_wallets(data_file: str) -> list:
 
 
 def save_to_excel(wallets1: list, wallets2: list) -> None:
-    columns = list(wallets1[0].keys())
+    pretty_columns = [
+        "Ranking",
+        "User Address",
+        "Ranking Score",
+        "Transactions Count",
+        "Bridged Amount ($)",
+        "Eth Total",
+        "Stables Total",
+        "Interacted Source Chains / Destination Chains / Contracts Count",
+        "Unique Active Days / Weeks/ Months",
+        "LZ Age In Days",
+        "Initial Active Data"
+    ]
 
+    columns = list(wallets1[0].keys())
     columns.insert(5,"eth_total")
     columns.insert(6,"stables_total")
-    pretty_columns = [' '.join([j.title() for j in i.split('_')]) for i in columns]
 
     for wallet in wallets1:
         for i, wallet2 in enumerate(wallets2):
-            if wallet["user_address"] == wallet2["address"]:
+            if wallet["ua"] == wallet2["address"]:
                 break
         else:
             wallet["eth_total"] = 0
@@ -124,7 +136,7 @@ def save_to_excel(wallets1: list, wallets2: list) -> None:
     worksheet.write(len(wallets1) + 3, 1, '0x2e69Da32b0F7e75549F920CD2aCB0532Cc2aF0E7')
 
     row_format = workbook.add_format({'align': 'center'})
-    sizes = [9, 45, 8, 10, 12, 12, 12, 12, 11, 15, 11, 12, 11, 9, 11, 11]
+    sizes = [9, 45, 8, 12, 12, 13, 12, 17, 17, 8, 20]
     for col_num, size in enumerate(sizes):
         worksheet.set_column(col_num, col_num, size, row_format)
 
@@ -134,7 +146,7 @@ def save_to_excel(wallets1: list, wallets2: list) -> None:
         'align': 'center',
         'border': 1
     })
-    worksheet.set_row(0, 50, first_row_format)
+    worksheet.set_row(0, 60, first_row_format)
 
     workbook.close()
 
