@@ -1,8 +1,9 @@
 {
     "operationName": "GetResult",
     "variables": {
-        "query_id": 2464151,
-        "parameters": []
+        "query_id": 2463827,
+        "parameters": [],
+        "can_refresh": true
     },
-    "query": "query GetResult($query_id: Int!, $parameters: [Parameter!]!) {\n  get_result_v3(query_id: $query_id, parameters: $parameters) {\n    job_id\n    result_id\n    error_id\n    __typename\n  }\n}\n"
+    "query": "query GetResult($query_id: Int!, $parameters: [Parameter!]!, $can_refresh: Boolean!) {\n  get_result_v4(\n    query_id: $query_id\n    parameters: $parameters\n    can_refresh: $can_refresh\n  ) {\n    job_id\n    result_id\n    error_id\n    __typename\n  }\n}\n"
 }

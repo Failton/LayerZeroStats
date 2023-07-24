@@ -167,7 +167,7 @@ def get_execution_id(session: tls_client.Session, query_id: int) -> int:
         except Exception as error:
             logger.error(f'Ошибка обновления базы данных: {error}')
 
-    execution_id = response.json()['data']['get_result_v3']['result_id']
+    execution_id = response.json()['data']['get_result_v4']['result_id']
     return execution_id
 
 
